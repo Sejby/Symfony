@@ -9,12 +9,20 @@ use App\Entity\Postava;
 use App\Form\PostavaFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
 
 class PostavaController extends AbstractController
 {
-    #[Route('/', name:'home')]
-    public function vytvorPostavu(Environment $twig, Request $request, EntityManagerInterface $em): Response
+    #[Route('/', name: 'main')]
+    public function vypisPostavy(EntityManagerInterface $em)
+    {
+        $data = $em->getRepository(Postava::class)->findAll();
+        return $this->render('index.html.twig', [
+            'list' => $data,
+        ]);
+    }
+
+    #[Route('/vytvor', name: 'vytvor')]
+    public function vytvorPostavu(Request $request, EntityManagerInterface $em): Response
     {
         $postava = new Postava();
 
@@ -25,19 +33,41 @@ class PostavaController extends AbstractController
             $em->persist($postava);
             $em->flush();
 
-            return $this->redirectToRoute('home');
+            $this->addFlash('success', 'Úspěšně vloženo do databáze!');
+            return $this->redirectToRoute('main');
         }
-        return new Response($twig->render('cislicko.html.twig', [
+        return $this->render('vytvor.html.twig', [
             'postava_form' => $formular->createView()
-        ]));
+        ]);
     }
 
-    #[Route('/vypisPostavy', name:'vypisPostavy')]
-    public function vypisPostavy(EntityManagerInterface $em, Environment $twig): Response{
-        $repo = $em->getRepository(Postava::class);
-        $dotaz = $repo->findAll();
-        return new Response($twig->render('cislicko.html.twig', [
-            'polePostav' => $dotaz
-        ]));
+    #[Route('/uprav/{id}', name: 'uprav')]
+    public function upravPostavu(Request $request, EntityManagerInterface $em, $id): Response
+    {
+        $postava = $em->getRepository(Postava::class)->find($id);
+        $formular = $this->createForm(PostavaFormType::class, $postava);
+
+        $formular->handleRequest($request);
+        if ($formular->isSubmitted() && $formular->isValid()) {
+            $em->persist($postava);
+            $em->flush();
+
+            $this->addFlash('success', 'Úspěšně upraveno v databázi!');
+            return $this->redirectToRoute('main');
+        }
+        return $this->render('uprav.html.twig', [
+            'postava_form' => $formular->createView()
+        ]);
+    }
+
+    #[Route('/smaz/{id}', name: 'smaz')]
+    public function smazPostavu(EntityManagerInterface $em, $id): Response
+    {
+        $postava = $em->getRepository(Postava::class)->find($id);
+        $em->remove($postava);
+        $em->flush();
+
+        $this->addFlash('success','Úspěšně smazáno!');
+        return $this->redirectToRoute('main');
     }
 }
