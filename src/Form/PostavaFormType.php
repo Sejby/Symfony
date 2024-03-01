@@ -15,16 +15,19 @@ class PostavaFormType extends AbstractType
     {
         $builder
             ->add('jmeno', TextType::class, [
+                'label' => 'Jméno',
                 'attr' => [
                     'class' => 'input-group',
                 ]
             ])
             ->add('prijmeni', TextType::class, [
+                'label' => 'Příjmení',
                 'attr' => [
                     'class' => 'input-group',
                 ]
             ])
             ->add('vek', TextType::class, [
+                'label' => 'Věk',
                 'attr' => [
                     'class' => 'input-group',
                 ]
@@ -33,12 +36,14 @@ class PostavaFormType extends AbstractType
                 'zvire',
                 TextType::class,
                 [
+                    'label' => 'Zvíře',
                     'attr' => [
                         'class' => 'input-group',
                     ]
                 ]
             )
             ->add('poslatDoDatabaze', SubmitType::class, [
+                'label' => 'Poslat do PostgreSQL',
                 'attr' => [
                     'class' => 'btn btn-success',
                 ]

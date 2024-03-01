@@ -13,9 +13,8 @@ use Twig\Environment;
 
 class PostavaController extends AbstractController
 {
-    #[Route('/')]
-
-    public function cislo(Environment $twig, Request $request, EntityManagerInterface $em): Response
+    #[Route('/', name:'home')]
+    public function vytvorPostavu(Environment $twig, Request $request, EntityManagerInterface $em): Response
     {
         $postava = new Postava();
 
@@ -26,11 +25,19 @@ class PostavaController extends AbstractController
             $em->persist($postava);
             $em->flush();
 
-            return new Response('Postava'. $postava->getJmeno() . $postava->getPrijmeni(). 'Byla vytvořena a poslána do databáze');
+            return $this->redirectToRoute('home');
         }
-
         return new Response($twig->render('cislicko.html.twig', [
             'postava_form' => $formular->createView()
+        ]));
+    }
+
+    #[Route('/vypisPostavy', name:'vypisPostavy')]
+    public function vypisPostavy(EntityManagerInterface $em, Environment $twig): Response{
+        $repo = $em->getRepository(Postava::class);
+        $dotaz = $repo->findAll();
+        return new Response($twig->render('cislicko.html.twig', [
+            'polePostav' => $dotaz
         ]));
     }
 }
