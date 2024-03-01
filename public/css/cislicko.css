@@ -22,9 +22,13 @@ form {
   margin-right: auto;
 }
 
-table{
-    width: 50% !important;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5%;
+table {
+  margin-top: 5%;
+  width: 60% !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#tlacitkonadb {
+  margin-right: 50%;
 }

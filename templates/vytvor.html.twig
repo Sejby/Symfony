@@ -1,12 +1,9 @@
 {% extends "base.html.twig" %}
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success">{{message}}</div>
-	{% endfor %}
 
 	<div id="formicek">
-		{{form_start(postava_form)}}
-		{{form(postava_form)}}
+		    {{form_start(postava_form)}}
+		        {{form(postava_form)}}
 			{{form_end(postava_form)}}
 		</div>
 	{% endblock %}

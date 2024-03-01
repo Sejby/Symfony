@@ -1,14 +1,20 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-	<table class="table">
-		<thead>
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">{{message}}</div>
+	{% endfor %}
+
+	<table class="table table-striped">
+		<thead class="thead-light">
 			<tr>
 				<th scope="col">ID</th>
 				<th scope="col">Jméno</th>
 				<th scope="col">Příjmení</th>
 				<th scope="col">Věk</th>
 				<th scope="col">Zvíře</th>
+				<th scope="col"></th>
+				<th scope="col"></th>
 			</tr>
 		</thead>
 		{% for postava in list %}
@@ -19,10 +25,15 @@
 					<td>{{postava.prijmeni}}</td>
 					<td>{{postava.vek}}</td>
 					<td>{{postava.zvire}}</td>
-                    <td><a class="btn btn-warning" href="{{path('uprav', {'id': postava.id })}}">Upravit</a></td>
-                    <td><a class="btn btn-danger" href="{{path('smaz', {'id': postava.id })}}">Smazat</a></td>
+					<td>
+						<a class="btn btn-outline-info btn-sm" href="{{path('uprav', {'id': postava.id })}}">Upravit</a>
+					</td>
+					<td>
+						<a class="btn btn-outline-danger btn-sm" href="{{path('smaz', {'id': postava.id })}}">Smazat</a>
+					</td>
 				</tr>
 			</tbody>
 		{% endfor %}
 	</table>
+	<a href="{{ path('vytvor') }}" class="btn btn-success" id="tlacitkonadb">Vytvoř postavu v Databázi</a>
 {% endblock %}
