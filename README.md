@@ -12,3 +12,5 @@
 - Twig (HTML)
 - Bootstrap
 - CSS
+
+- Konfigurace .env souboru
